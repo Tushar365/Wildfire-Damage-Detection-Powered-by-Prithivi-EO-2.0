@@ -6,28 +6,14 @@ FireWatch is a specialized geospatial analysis tool built on top of IBM and NASA
 
 ```mermaid
 graph TD
-    User([User]) -->|Uploads GeoTIFFs| Flask[Flask Web Server]
+    Input[Pre & Post Satellite Images] --> Processor[Data Pre-processing]
+    Processor --> AI[Prithivi AI & Spectral Engine]
+    AI --> Logic[Hybrid Damage Detection]
 
-    subgraph "Processing Logic"
-        Flask -->|Raw Bands| Processor[GeoTIFF Processor]
-        Processor -->|Normalization| Tensors[HLS Tensors]
-
-        subgraph "Hybrid Inference"
-            Tensors --> dNBR[Spectral dNBR]
-            Tensors --> DL[Prithivi Embeddings]
-            dNBR & DL --> Fusion[Confidence Fusion]
-        end
-
-        Fusion --> Mask[Damage Mask]
-    end
-
-    subgraph "Visualizations"
-        Mask --> RGB[Natural Color]
-        Mask --> Overlay[Pink/Purple Overlay]
-        Mask --> Boxed[Red Boxed Detection]
-    end
-
-    RGB & Overlay & Boxed & Mask -->|Serve| User
+    Logic --> Mask[Damage Mask]
+    Logic --> Overlay[Pink & Purple Overlay]
+    Logic --> Boxed[Red Boxed Detection]
+    Logic --> Export[GeoTIFF Metadata Export]
 ```
 
 ## ✨ Features
