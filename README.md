@@ -88,7 +88,12 @@ Integrated automated target identification. Using connected-component analysis, 
     uv sync
     ```
 
-3.  **Run the application**:
+3.  **Download the Model Weights**:
+    The application uses the **Prithivi-EO-2.0-300M** foundation model. While the app will attempt to download weights automatically on first run, we recommend downloading them manually via Git LFS if you have a slow connection:
+    - **Link**: [IBM/NASA Prithivi-EO-2.0-300M (Hugging Face)](https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-2.0-300M)
+    - Place the weights in a `./weights` folder in the project root if you wish to use them offline.
+
+4.  **Run the application**:
     ```bash
     uv run python app.py
     ```
@@ -141,6 +146,15 @@ Since FireWatch is designed for the **NASA HLS** standard, you can download more
 ## 📄 License
 
 This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details. Built using Prithvi-EO-2.0 models by IBM Research and NASA.
+
+---
+
+## 🏷️ GitHub Repository Info
+
+If you are hosting this on GitHub, here are the suggested metadata settings:
+
+- **Description**: AI-powered wildfire damage detection using IBM/NASA Prithivi-EO-2.0 foundation models and hybrid spectral analysis for high-precision burn mapping.
+- **Topics**: `wildfire-detection`, `remote-sensing`, `earth-observation`, `prithivi-eo`, `geospatial-ai`, `computer-vision`, `satellite-imagery`, `nasa-hls`, `burn-severity`, `pytorch`, `geotiff`, `flask`, `change-detection`, `foundation-models`, `climate-tech`
 
 ---
 
