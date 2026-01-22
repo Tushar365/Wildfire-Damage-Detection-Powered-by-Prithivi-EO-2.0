@@ -43,24 +43,23 @@ graph TD
 - **Spatial Export**: Results can be downloaded as georeferenced TIFs for immediate use in GIS software like QGIS or ArcGIS.
 - **CPU-Optimized**: Engineered to run efficiently on standard CPU environments using `terratorch` and `torch` optimizations.
 
-## 🎞️ Visual Showcase (Public Example)
+## 🎞️ Visual Showcase (Example Results)
 
-```carousel
-![Pre-Event](public/20260122_221111_pre.png)
-*Input: Pre-Event Satellite Imagery*
-<!-- slide -->
-![Post-Event](public/20260122_221111_post.png)
-*Input: Post-Event Satellite Imagery (with burn scars)*
-<!-- slide -->
-![Change Mask](public/20260122_221111_mask.png)
-*Output: Raw Change Mask (Binary)*
-<!-- slide -->
-![Purple Overlay](public/20260122_221111_overlay.png)
-*Output: Pink/Purple High-Contrast Overlay*
-<!-- slide -->
-![Boxed Detection](public/20260122_221111_boxed.png)
-*Output: Red Bounding Box Detection*
-```
+The following imagery demonstrates the end-to-end detection process on a real satellite image pair (unknown area).
+
+### 🌓 Input Comparison
+
+|                  Pre-Event                   |                   Post-Event                   |
+| :------------------------------------------: | :--------------------------------------------: |
+| ![Pre-Event](public/20260122_221111_pre.png) | ![Post-Event](public/20260122_221111_post.png) |
+|       _Satellite view before the fire_       |  _Satellite view after the fire (burn scars)_  |
+
+### 📊 Detection Outputs
+
+|                   Change Mask                   |                  Pink/Purple Overlay                  |                 Red Boxed Detection                  |
+| :---------------------------------------------: | :---------------------------------------------------: | :--------------------------------------------------: |
+| ![Change Mask](public/20260122_221111_mask.png) | ![Purple Overlay](public/20260122_221111_overlay.png) | ![Boxed Detection](public/20260122_221111_boxed.png) |
+|        _Raw AI Detection (Binary Mask)_         |             _Enhanced Composite Overlay_              |          _Automated Cluster Identification_          |
 
 ---
 
@@ -74,7 +73,7 @@ A binary representation of the detected areas. This is the pure mathematical out
 
 ### 2. 🎆 Pink/Purple Overlay (`*_overlay.png`)
 
-A high-contrast visualization designed for human interpretation. By using a **Pink/Purple** spectrum on top of the original imagery, it provides 200% better visibility compared to standard red masks, especially over dark, charred forest backgrounds.
+A high-contrast visualization designed for human interpretation. By using a **Pink/Purple** spectrum on top of the original imagery, it provides superior visibility compared to standard red masks, especially over dark, charred forest backgrounds.
 
 ### 3. 🟥 Red Boxed Detection (`*_boxed.png`)
 
@@ -111,7 +110,7 @@ Integrated automated target identification. Using connected-component analysis, 
 
 ### ⚡ Quick Start with Public Demo Data
 
-FireWatch includes a public satellite dataset of an **unknown area** to help you test the detection pipeline immediately:
+FireWatch includes a public satellite data example to help you test the detection pipeline immediately:
 
 1.  Start the server using `uv run python app.py`.
 2.  Open `http://localhost:5000` in your browser.
@@ -148,7 +147,7 @@ This reduces false positives caused by clouds, shadows, or seasonal vegetation c
 
 ## 🌍 Open Satellite Data Sources
 
-Since FireWatch is designed for the **NASA HLS** standard, you can download more public imagery from these official sources for your own analysis:
+Since FireWatch is designed for the **NASA HLS** standard, you can download more public imagery from these official sources:
 
 1.  **NASA Earthdata Search**: Access [HLS L30 (Landsat)](https://search.earthdata.nasa.gov/search?q=HLSL30) and [HLS S30 (Sentinel)](https://search.earthdata.nasa.gov/search?q=HLSS30) global datasets.
 2.  **USGS EarthExplorer**: High-resolution [Landsat 8-9](https://earthexplorer.usgs.gov/) products compatible with HLS.
@@ -161,4 +160,3 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 ---
 
 Built with ❤️ for Earth Observation.
-# Wildfire-Damage-Detection-Powered-by-Prithivi-EO-2.0
