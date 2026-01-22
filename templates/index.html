@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wildfire Damage Detection - Prithivi 2.0</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Wildfire Damage Detection</h1>
+        <p class="subtitle">Powered by Prithivi-EO-2.0</p>
+      </header>
+
+      <main>
+        <!-- Upload Section -->
+        <section class="upload-section">
+          <div class="card">
+            <h2>Upload GeoTIFF Images</h2>
+            <p class="info">
+              Upload 6-band HLS format GeoTIFF files (pre and post wildfire
+              event)
+            </p>
+
+            <form id="uploadForm" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="preImage">
+                  <strong>Pre-Event Image</strong>
+                  <span class="label-hint">(Before wildfire)</span>
+                </label>
+                <input
+                  type="file"
+                  id="preImage"
+                  name="pre_image"
+                  accept=".tif,.tiff"
+                  required
+                />
+                <div class="file-info" id="preFileInfo"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="postImage">
+                  <strong>Post-Event Image</strong>
+                  <span class="label-hint">(After wildfire)</span>
+                </label>
+                <input
+                  type="file"
+                  id="postImage"
+                  name="post_image"
+                  accept=".tif,.tiff"
+                  required
+                />
+                <div class="file-info" id="postFileInfo"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="threshold">
+                  <strong>Detection Threshold</strong>
+                  <span class="threshold-value" id="thresholdValue">0.5</span>
+                </label>
+                <input
+                  type="range"
+                  id="threshold"
+                  name="threshold"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value="0.5"
+                />
+                <div class="threshold-hint">
+                  Lower = more sensitive (more areas detected as changed)<br />
+                  Higher = less sensitive (only significant changes detected)
+                </div>
+              </div>
+
+              <button type="submit" id="submitBtn" class="btn-primary">
+                Detect Changes
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section
+          id="progressSection"
+          class="progress-section"
+          style="display: none"
+        >
+          <div class="card">
+            <div class="progress-container">
+              <div class="spinner"></div>
+              <h3 id="progressMessage">Processing images...</h3>
+              <p class="progress-hint">This may take 2-5 minutes on CPU</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Error Section -->
+        <section id="errorSection" class="error-section" style="display: none">
+          <div class="card error-card">
+            <h3>Error</h3>
+            <p id="errorMessage"></p>
+            <button onclick="resetForm()" class="btn-secondary">
+              Try Again
+            </button>
+          </div>
+        </section>
+
+        <!-- Results Section -->
+        <section
+          id="resultsSection"
+          class="results-section"
+          style="display: none"
+        >
+          <div class="card">
+            <h2>Detection Results</h2>
+
+            <!-- Statistics -->
+            <div class="statistics">
+              <div class="stat-item">
+                <span class="stat-label">Burned Pixels:</span>
+                <span class="stat-value" id="changedPixels">-</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Total Pixels:</span>
+                <span class="stat-value" id="totalPixels">-</span>
+              </div>
+              <div class="stat-item highlight">
+                <span class="stat-label">Burn Percentage:</span>
+                <span class="stat-value" id="changePercentage">-</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Threshold Used:</span>
+                <span class="stat-value" id="thresholdUsed">-</span>
+              </div>
+            </div>
+
+            <!-- Image Comparison -->
+            <div class="image-grid">
+              <div class="image-container">
+                <h3>Pre-Event</h3>
+                <img id="preResultImage" src="" alt="Pre-event image" />
+              </div>
+              <div class="image-container">
+                <h3>Post-Event</h3>
+                <img id="postResultImage" src="" alt="Post-event image" />
+              </div>
+              <div class="image-container">
+                <h3>Change Mask</h3>
+                <img id="maskResultImage" src="" alt="Change mask" />
+                <p class="image-hint">Red areas indicate detected damage</p>
+              </div>
+              <div class="image-container">
+                <h3>Overlay</h3>
+                <img
+                  id="overlayResultImage"
+                  src=""
+                  alt="Overlay visualization"
+                />
+                <p class="image-hint">Damage overlay on post-event image</p>
+              </div>
+              <div class="image-container">
+                <h3>Boxed Detection</h3>
+                <img
+                  id="boxedResultImage"
+                  src=""
+                  alt="Boxed visualization"
+                />
+                <p class="image-hint">Red squares identify detected burn areas</p>
+              </div>
+            </div>
+
+            <!-- Download Links -->
+            <div class="download-section">
+              <h3>Download Results</h3>
+              <div class="download-links">
+                <a id="downloadPre" href="#" download class="btn-download"
+                  >Pre-Event PNG</a
+                >
+                <a id="downloadPost" href="#" download class="btn-download"
+                  >Post-Event PNG</a
+                >
+                <a id="downloadMask" href="#" download class="btn-download"
+                  >Change Mask PNG</a
+                >
+                <a id="downloadOverlay" href="#" download class="btn-download"
+                  >Overlay PNG</a
+                >
+                <a id="downloadBoxed" href="#" download class="btn-download"
+                  >Boxed PNG</a
+                >
+                <a id="downloadGeoTIFF" href="#" download class="btn-download"
+                  >GeoTIFF Mask</a
+                >
+              </div>
+            </div>
+
+            <button onclick="resetForm()" class="btn-secondary">
+              Process Another Pair
+            </button>
+          </div>
+        </section>
+
+        <!-- Info Section -->
+        <section class="info-section">
+          <div class="card info-card">
+            <h2>About This Tool</h2>
+            <p>
+              This application uses NASA's Prithivi-EO-2.0-300M model to detect
+              wildfire damage by comparing pre and post-event satellite imagery.
+            </p>
+            <ul>
+              <li>
+                <strong>Input Format:</strong> 6-band HLS (Harmonized Landsat
+                Sentinel) GeoTIFF files
+              </li>
+              <li><strong>Model:</strong> Prithivi-EO-2.0-300M (IBM & NASA)</li>
+              <li>
+                <strong>Processing:</strong> CPU-based inference (2-5 minutes
+                typical)
+              </li>
+              <li>
+                <strong>Output:</strong> RGB visualizations and georeferenced
+                change mask
+              </li>
+            </ul>
+            <div class="links">
+              <a
+                href="https://github.com/NASA-IMPACT/Prithvi-EO-2.0"
+                target="_blank"
+                >Model Documentation</a
+              >
+              <a
+                href="https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-2.0-300M"
+                target="_blank"
+                >Hugging Face</a
+              >
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>Prithivi-EO-2.0 by IBM & NASA | Built with Flask</p>
+      </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>
