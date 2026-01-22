@@ -149,13 +149,8 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 
 ---
 
-## 🏷️ GitHub Repository Info
 
-If you are hosting this on GitHub, here are the suggested metadata settings:
-
-- **Description**: AI-powered wildfire damage detection using IBM/NASA Prithivi-EO-2.0 foundation models and hybrid spectral analysis for high-precision burn mapping.
-- **Topics**: `wildfire-detection`, `remote-sensing`, `earth-observation`, `prithivi-eo`, `geospatial-ai`, `computer-vision`, `satellite-imagery`, `nasa-hls`, `burn-severity`, `pytorch`, `geotiff`, `flask`, `change-detection`, `foundation-models`, `climate-tech`
 
 ---
 
-Built with ❤️ for Earth Observation.
+Built with ❤️ for Earth Observation by tushar365.
